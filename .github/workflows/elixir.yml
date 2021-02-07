@@ -3,15 +3,11 @@ name: Elixir CI
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
+  
 jobs:
   build:
-
-    name: Build, test and deploy to gigalixir
+    name: Build and test
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Elixir
@@ -29,7 +25,24 @@ jobs:
       run: mix deps.get
     - name: Run tests
       run: mix test
-    - name: Deploy to gigalixir
-    - uses: mhanberg/gigalixir-action@v0.4.0
-  
+
+  deployment:
+    name: Deploy to gigalixir
+    needs: build # Will only run if the test job succeeds
+    if: github.ref == 'refs/heads/main' # Only run this job if it is on the main branch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: master # Checkout out master instead of the latest commit
+          fetch-depth: 0 # Checkout the whole branch
+
+      - uses: mhanberg/gigalixir-action@v0.4.0
+        with:
+          GIGALIXIR_USERNAME: ${{ secrets.GIGALIXIR_USERNAME }}
+          GIGALIXIR_PASSWORD: ${{ secrets.GIGALIXIR_PASSWORD }}
+          GIGALIXIR_APP: ${{ secrets.GIGALIXIR_APP }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          MIGRATIONS: false  # defaults to true
+    
 
