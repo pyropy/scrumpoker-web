@@ -1,0 +1,29 @@
+<div class="flex flex-row justify-center space-x-6">
+<%= if @player do %>
+    <button phx-click="vote" phx-value-vote="1" class="shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">1</button>
+    <button phx-click="vote" phx-value-vote="2" class="shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">2</button>
+    <button phx-click="vote" phx-value-vote="3" class="shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">3</button>
+    <button phx-click="vote" phx-value-vote="5" class="shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">5</button>
+    <button phx-click="vote" phx-value-vote="8" class="shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">8</button>
+    <button phx-click="vote" phx-value-vote="13" class="shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">13</button>
+    <button phx-click="vote" phx-value-vote="21" class="shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">21</button>
+    <button phx-click="vote" phx-value-vote="34" class="shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">34</button>
+    <button phx-click="vote" phx-value-vote="55" class="shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">55</button>
+    <button phx-click="vote" phx-value-vote="☕" class="shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">☕</button>
+<% else %>
+    <h1 class="text-gray-500">Enter your name</h1>
+    <form phx-submit="player_join">
+    <div class="inputs">
+        <input type="text" name="name"/>
+    </div>
+    <button type="submit">Join</button>
+    </form>
+</div>
+<% end %>
+
+<%= for player <- @game.players do %>
+    <div class="player">
+    <div class="player-name"><%= player.name %></div>
+    <div class="player-vote"><%= player.vote %></div>
+</div>
+<% end %>
