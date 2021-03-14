@@ -20,7 +20,7 @@ defmodule ScrumpokerwebWeb.GameLive do
     |> assign_game()
   end
 
-defp assign_game(socket, %Player{} = player) do
+  defp assign_game(socket, %Player{} = player) do
     socket
     |> assign(player: player)
     |> assign_game()
@@ -48,7 +48,45 @@ defp assign_game(socket, %Player{} = player) do
   end
 
   @impl true
+  def handle_event("update_topic", %{"topic_name" => new_topic_name}, %{assigns: %{game_id: game_id, player: player}} = socket) do
+    GameServer.update_topic(game_id, player, new_topic_name)
+    :ok = Phoenix.PubSub.broadcast(Scrumpokerweb.PubSub, game_id, :update)
+    {:noreply, assign_game(socket)}
+  end
+
+  @impl true
+  def handle_event("vote_reveal", _, %{assigns: %{game_id: game_id, player: player}} = socket) do
+    GameServer.vote_reveal(game_id, player)
+    :ok = Phoenix.PubSub.broadcast(Scrumpokerweb.PubSub, game_id, :update)
+    {:noreply, assign_game(socket)}
+  end
+
+  @impl true
+  def handle_event("reset_votes", _, %{assigns: %{game_id: game_id}} = socket) do
+    GameServer.reset_votes(game_id)
+    :ok = Phoenix.PubSub.broadcast(Scrumpokerweb.PubSub, game_id, :update)
+    {:noreply, assign_game(socket)}
+  end
+
+  @impl true
   def handle_info(:update, socket) do
     {:noreply, assign_game(socket)}
+  end
+
+  @impl true
+  def terminate(reason, %{assigns: %{game_id: game_id, player: player}} = socket) do
+    if disconnected?(reason) do
+      GameServer.player_leave(game_id, player)
+      :ok = Phoenix.PubSub.broadcast(Scrumpokerweb.PubSub, game_id, :update)
+      {:noreply, assign_game(socket)}
+    end
+  end
+
+  defp disconnected?(reason) do
+    case reason do
+    :shutdown -> true
+      {:shutdown, shutdown_reason} when shutdown_reason in [:left, :closed] -> true
+      _other -> false
+    end
   end
 end

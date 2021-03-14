@@ -1,29 +1,43 @@
-<div class="flex flex-row justify-center space-x-6">
-<%= if @player do %>
-    <button phx-click="vote" phx-value-vote="1" class="shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">1</button>
-    <button phx-click="vote" phx-value-vote="2" class="shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">2</button>
-    <button phx-click="vote" phx-value-vote="3" class="shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">3</button>
-    <button phx-click="vote" phx-value-vote="5" class="shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">5</button>
-    <button phx-click="vote" phx-value-vote="8" class="shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">8</button>
-    <button phx-click="vote" phx-value-vote="13" class="shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">13</button>
-    <button phx-click="vote" phx-value-vote="21" class="shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">21</button>
-    <button phx-click="vote" phx-value-vote="34" class="shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">34</button>
-    <button phx-click="vote" phx-value-vote="55" class="shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">55</button>
-    <button phx-click="vote" phx-value-vote="☕" class="shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">☕</button>
+<div class="flex flex-row flex-wrap justify-center space-x-6 space-y-6">
+    <%= if @player do %>
+    <h1><%= @game.topic_name %></h1>
+    <%# <div>
+  	<form class="m-4 flex" phx-submit="update_topic">
+    	<input type="text" name="topic_name" class="rounded-l-lg p-4 border-t mr-0 border-b border-l text-gray-800 border-gray-200 bg-white" placeholder="Topic"/>
+		<button class="px-8 rounded-r-lg bg-yellow-400  text-gray-800 font-bold p-4 uppercase border-yellow-500 border-t border-b border-r">Change Topic</button>
+	</form>
+    </div> %>
+
+    <button phx-click="vote" phx-value-vote="1" class="box-content h-24 w-16 shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-500">1</button>
+    <button phx-click="vote" phx-value-vote="2" class="box-content h-24 w-16 shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">2</button>
+    <button phx-click="vote" phx-value-vote="3" class="box-content h-24 w-16 shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">3</button>
+    <button phx-click="vote" phx-value-vote="5" class="box-content h-24 w-16 shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">5</button>
+    <button phx-click="vote" phx-value-vote="8" class="box-content h-24 w-16 shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">8</button>
+    <button phx-click="vote" phx-value-vote="13" class="box-content h-24 w-16 shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">13</button>
+    <button phx-click="vote" phx-value-vote="21" class="box-content h-24 w-16 shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">21</button>
+    <button phx-click="vote" phx-value-vote="34" class="box-content h-24 w-16 shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">34</button>
+    <button phx-click="vote" phx-value-vote="55" class="box-content h-24 w-16 shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">55</button>
+    <button phx-click="vote" phx-value-vote="☕" class="box-content h-24 w-16 shadow-sm hover:shadow-lg border bg-white text-purple-600 py-12 px-6 rounded text-center disabled:bg-gray-300">☕</button>
+</div>
 <% else %>
-    <h1 class="text-gray-500">Enter your name</h1>
-    <form phx-submit="player_join">
-    <div class="inputs">
-        <input type="text" name="name"/>
-    </div>
-    <button type="submit">Join</button>
-    </form>
+  	<form class="m-4 flex" phx-submit="player_join">
+    	<input type="text" name="name" class="rounded-l-lg p-4 border-t mr-0 border-b border-l text-gray-800 border-gray-200 bg-white" placeholder="Your Name"/>
+		<button class="px-8 rounded-r-lg bg-purple-600  text-white font-bold p-4 uppercase border-white border-t border-b border-r">Join</button>
+	</form>
 </div>
 <% end %>
 
-<%= for player <- @game.players do %>
-    <div class="player">
-    <div class="player-name"><%= player.name %></div>
-    <div class="player-vote"><%= player.vote %></div>
+<div class="container mx-auto p-10">
+    <%= for player <- @game.players do %>
+        <span class="inline-block box-content h-24 w-16 shadow-sm border bg-purple-600 text-white py-12 px-6 rounded overflow-hidden text-center mx-2 my-2">
+            <%= player.name %>
+            <%= if @game.vote_reveal do %>
+            <%= player.vote %>
+            <% end %>
+        </span>
+    <% end %>
 </div>
-<% end %>
+<div class="flex flex-row justify-center space-x-2">
+    <button phx-click="vote_reveal" class="transition duration-500 bg-purple-600 hover:bg-white text-white hover:text-purple-600 rounded px-4 py-2 border-purple-600 border-2">Reveal Votes</button>
+    <button phx-click="reset_votes" class="transition duration-500 bg-purple-600 hover:bg-white text-white hover:text-purple-600 rounded px-4 py-2 border-purple-600 border-2">Reset Votes</button>
+</div>
